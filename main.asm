@@ -63,64 +63,6 @@ Reset:
         wai ; Wait for NMI
 jmp game_loop
 
-; check_inputs:
-; 	input_on_left wJoyInput, move_sprite_left
-; 	input_on_right wJoyInput, move_sprite_right
-; 	input_on_up wJoyInput, move_sprite_up
-; 	input_on_down wJoyInput, move_sprite_down
-; 	; input_on_x wJoyInput, move_sprite_right
-; rts
-
-; joy_update_2:
-; 	lda wJoyInput + 1               
-; 	bit #>KEY_RIGHT
-; 	beq end_update_2
-; 	jsr move_sprite_right
-; 	end_update_2:
-; rts
-
-; joy_update:
-;     check_x:
-;         lda wJoyInput
-;         bit #<KEY_X
-;         beq check_L
-;         jsr mercilak_flip_v
-;     ; This has L and R
-;     check_L:
-;         lda wJoyInput
-;         bit #<KEY_L
-;         beq check_R                 ; if not set (is zero) we skip 
-;         jsr screen_scroll_left
-;     check_R:
-;         lda wJoyInput
-;         bit #<KEY_R
-;         beq check_left              ; if not set (is zero) we skip 
-;         jsr screen_scroll_right
-;
-;     ; Check for keys in the high byte
-;     check_left:
-;         lda wJoyInput + 1               
-;         bit #>KEY_LEFT              ; check for key
-;         beq check_up                ; if not set (is zero) we skip 
-;         jsr move_sprite_left
-;     check_up:
-;         lda wJoyInput + 1               
-;         bit #>KEY_UP
-;         beq check_down
-;         jsr move_sprite_up
-;     check_down:
-;         lda wJoyInput + 1               
-;         bit #>KEY_DOWN
-;         beq check_right
-;         jsr move_sprite_down
-;     check_right:
-;         lda wJoyInput + 1               
-;         bit #>KEY_RIGHT
-;         beq endjoycheck
-;         jsr move_sprite_right
-;     endjoycheck:
-; rts
-
 
 VBlank:
     ; Detect Beginning of VBlank (Appendix B-3)        
@@ -132,38 +74,14 @@ VBlank:
     ; TODO: change data settings for BG&OAM that renew picture
 
     ; Constant Screen Scrolling
-    jsr screen_scroll_left
+    ; jsr screen_scroll_left
 
     ; Update the screen scroll register
-	screen_scroll_vupdate
+	; screen_scroll_vupdate
 
     endvblank: 
 rti 
 
-
-; This updates man pos directly instead of vRAM mirror
-; This is bad
-vupdate_man_pos:
-    ; update the sprite (0000) position
-    lda #$00
-    sta OAMADDL     
-    lda #$00
-    sta OAMADDH     ; write to oam slot 0000
-    lda bSpritePosX ; OBJ H pos
-    sta OAMDATA
-    lda bSpritePosY ; OBJ V pos
-    sta OAMDATA
-    ; Update the pants
-    lda #$02
-    sta OAMADDL     
-    lda #$00
-    sta OAMADDH     ; write to oam slot 0000
-    lda bSpritePosX ; OBJ H pos
-    sta OAMDATA
-    lda bSpritePosY ; OBJ V pos
-    inc
-    sta OAMDATA
-rts
 
 PAL_FONT_A_ADDR = $00
 PAL_BASIC_SET_ADDR = $10
@@ -200,7 +118,7 @@ setup_video:
     ; Load tile data to VRAM
     ;jsr reset_tiles
     ;graphics_vload_block test_font_a_obj, $0000, $0020 ; 2 tiles, 2bpp * 8x8 / 8bits = 32 bytes
-    ;graphics_vload_block font_charset, $0100, 640 ; 40 tiles, 2bpp * 8x8 / 8 bits= 
+    graphics_vload_block font_charset, $0100, 640 ; 40 tiles, 2bpp * 8x8 / 8 bits= 
     graphics_vload_block tiles_basic_set, $0280, 128 ; 8 tiles, 2bpp * 8x8 / 8 bits = 128
 
     ; BG2 blocks
