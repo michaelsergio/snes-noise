@@ -45,13 +45,15 @@ Reset:
     lda #(NMI_ON | AUTO_JOY_ON) ; enable NMI Enable and Joycon
     sta NMITIMEN
 
-	stz bSpritePosX
-	stz bSpritePosY
-	lda #$5
-	sta dpTmp5
+    stz bSpritePosX
+    stz bSpritePosY
+    lda #$5
+    sta dpTmp5
 
-	stz wJoyInput
-	stz wJoyInput + 1
+    stz wJoyInput
+    stz wJoyInput + 1
+
+    jsr do_audio_init
     
     game_loop:
         ; TODO: Gen data of register to be renewed & mem to change BG & OBJ data
