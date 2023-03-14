@@ -85,7 +85,7 @@ mov APU_DSP_VAL, #$2C ; ECEN off NCK=0C aka 200 Hz
 mov APU_DSP_ADR, #DSP_V0_ADSR_L
 mov APU_DSP_VAL, #$FE
 mov APU_DSP_ADR, #DSP_V0_ADSR_H
-mov APU_DSP_VAL, #$FA
+mov APU_DSP_VAL, #$E9 ; 7 SL with 09 (5sec) SR
 
 ; Set voice volume L/R
 mov APU_DSP_ADR, #DSP_V0_VOL_L
