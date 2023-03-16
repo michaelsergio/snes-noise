@@ -1,8 +1,6 @@
 ; This file will be compiled to .byte statments using the rules in spc-ca65.
 .include "spc-ca65.inc" 
 
-.export spc_init, spc_end
-
 ; Ports to write to the DSP (APU Addresses)
 APU_DSP_ADR = $F2
 APU_DSP_VAL = $F3

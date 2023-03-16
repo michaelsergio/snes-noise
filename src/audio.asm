@@ -2,7 +2,6 @@
 ; We define it in the segment "SPCIMAGE"
 ; It is configured in lorom128.inc to be at bank 018000
 
-.import spc_init, spc_end
 
 ; Do a simple audio transfer
 ; Transfer audio program
@@ -12,12 +11,22 @@
 ; It is $7DFF bytes long (little under 32k)
 START_ADDR = $0200
 
-; calculate the number of bytes to transfer
-SPC_SIZE = spc_end - spc_init
 
-audio_init:
+; Transmits an SPC700 program to the APU
+; This currently only transmits a single program to a fixed location
+;
+; bank - the bank the address is in
+; address - the word address of the spc file to upload
+; size - num bytes of the data to upload
+.macro audio_init bank, address, size
+	audio_init_begin:
 	; Save the program bank
 	phb
+
+	; Switch to the bank
+	lda #bank
+	pha
+	plb
 
 	; Follow the Data Tansfer Procedure in Appendix D
 
@@ -58,11 +67,6 @@ audio_init:
 
 
 	data_transfer_start:
-	SPC_ADDRESS = $018000
-	; Switch to the bank
-	lda #^SPC_ADDRESS
-	pha
-	plb
 
 	; Y is storing the offset to transfer
 	; (Finish when we get to size)
@@ -74,7 +78,7 @@ audio_init:
 	data_transfer_procedure:
 
 	; write data to port1
-	lda .loword(SPC_ADDRESS), y
+	lda address, y
 	sta APUIO1
 	; write len $00 to port 0
 	txa 
@@ -108,7 +112,7 @@ audio_init:
 	
 	check_if_done:
 	; We need to check if we are done. If so goto complete
-	cpy #SPC_SIZE
+	cpy #size
 	beq data_transfer_complete
 
 	; Otherwise continuing transmitting data
@@ -134,6 +138,5 @@ audio_init:
 
 	; Restore the program bank
 	plb
-rts
-
+.endmacro
 

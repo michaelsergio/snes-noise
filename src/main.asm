@@ -1,4 +1,4 @@
-.define ROM_NAME "Move Demo"
+.define ROM_NAME "Noise Demo"
 
 .include "snes_registers.asm"
 .include "lorom128.inc"
@@ -9,6 +9,9 @@
 .include "screen_scroll.asm"
 .include "input.asm"
 .include "audio.asm"
+
+; Include the SPC audio program load position and size
+.import __SPCIMAGE_LOAD__, __SPCIMAGE_SIZE__
 
 
 .zeropage
@@ -35,6 +38,7 @@ Reset:
     ; Initialize zeropage
     startup_clear_directpage
 
+	main_setup_video:
     jsr setup_video
 
     ; Release VBlank
@@ -45,6 +49,8 @@ Reset:
     lda #(NMI_ON | AUTO_JOY_ON) ; enable NMI Enable and Joycon
     sta NMITIMEN
 
+	main_init: 
+
     stz bSpritePosX
     stz bSpritePosY
     lda #$5
@@ -53,7 +59,8 @@ Reset:
     stz wJoyInput
     stz wJoyInput + 1
 
-    jsr audio_init
+	; Transfer the audio program
+    audio_init ^__SPCIMAGE_LOAD__, .loword(__SPCIMAGE_LOAD__), __SPCIMAGE_SIZE__
     
     game_loop:
         ; TODO: Gen data of register to be renewed & mem to change BG & OBJ data

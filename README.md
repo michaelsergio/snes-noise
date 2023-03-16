@@ -5,3 +5,5 @@ Simple code runs on the SPC700 that turns on the noise channel.
 Tag: first-noise - the simpliest bloop
 
 
+
+Running `./build` creates an executable ROM under bin/noise.smc
