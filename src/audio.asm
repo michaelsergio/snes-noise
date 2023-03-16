@@ -15,7 +15,7 @@ START_ADDR = $0200
 ; calculate the number of bytes to transfer
 SPC_SIZE = spc_end - spc_init
 
-do_audio_init:
+audio_init:
 	; Save the program bank
 	phb
 

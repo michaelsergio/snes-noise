@@ -53,7 +53,7 @@ Reset:
     stz wJoyInput
     stz wJoyInput + 1
 
-    jsr do_audio_init
+    jsr audio_init
     
     game_loop:
         ; TODO: Gen data of register to be renewed & mem to change BG & OBJ data
