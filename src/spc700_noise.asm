@@ -136,16 +136,17 @@ mov APU_DSP_VAL, #01
 ; T0res 125us * 256ms cnt * 16 = rolls over every 512ms
 ; Reduce to 250 ($FA) to get exactly 500ms
 ; Each value counted will be 32ms * cnt
-mov APU_DSP_TIMER_0, #$FA
 
-
-; Clear the timers
-mov APU_DSP_CTRL, #$00  ; Need to clear the timers first
-
-
-; Enable the timer 
-mov APU_DSP_CTRL, #$00  ; Need to clear the timers first
-mov APU_DSP_CTRL, #$01 ; Start timer 0, ; Don't clear any ports
+; mov APU_DSP_TIMER_0, #$FA
+;
+;
+; ; Clear the timers
+; mov APU_DSP_CTRL, #$00  ; Need to clear the timers first
+;
+;
+; ; Enable the timer 
+; mov APU_DSP_CTRL, #$00  ; Need to clear the timers first
+; mov APU_DSP_CTRL, #$01 ; Start timer 0, ; Don't clear any ports
 
 
 
@@ -153,13 +154,13 @@ mov APU_DSP_CTRL, #$01 ; Start timer 0, ; Don't clear any ports
 _apu_loop_forever:
   ; Our timer should be ticking
   ; If 4-bit up timer counter == 0: make noise note
-  bne _apu_loop_forever_continue
-  _apu_make_noise_note:
-  ; Turn key on for voice 0 (noise channel)
-  mov APU_DSP_ADR, #DSP_KEY_ON
-  mov APU_DSP_VAL, #01
-    
-  _apu_loop_forever_continue:
+
+  ; bne _apu_loop_forever_continue
+  ; _apu_make_noise_note:
+  ; ; Turn key on for voice 0 (noise channel)
+  ; mov APU_DSP_ADR, #DSP_KEY_ON
+  ; mov APU_DSP_VAL, #01
+  ; _apu_loop_forever_continue:
   bra _apu_loop_forever
 
 spc_end:
